@@ -1,7 +1,7 @@
 #Driver file: in charge of user input and current game state
 
 import pygame as p
-import ChessEngine
+import ChessEngine, ChessAI
 
 p.init()
 WIDTH = HEIGHT = 800
@@ -32,14 +32,17 @@ def main():
     sqSelected = () #none selected initially
     playerClicks = [] #tracks player clicks
     gameOver = False
+    playerOne = True # Determines if white is player(T) or AI(F)
+    playerTwo = False # Deterermines if black is ai(F) or player(T)
 
     while running:
+        humanTurn = (gs.whiteMove and playerOne) or (not gs.whiteMove and playerTwo)
         for e in p.event.get():
             if e.type == p.QUIT:
                 running = False
             #mouse 
             elif e.type == p.MOUSEBUTTONDOWN: #click functions
-                if not gameOver:
+                if not gameOver and humanTurn:
                     location = p.mouse.get_pos() #takes x and y position of the mouse
                     col = location[0] // SQ_SIZE
                     row = location[1] // SQ_SIZE
@@ -55,7 +58,7 @@ def main():
                             if move == validMoves[i]:
                                 gs.makeMove(validMoves[i])
                                 moveMade = True
-                                animate = True
+                                animate = True 
                                 sqSelected = ()
                                 playerClicks = []
                         if not moveMade:
@@ -76,6 +79,14 @@ def main():
                     playerClicks = []
                     moveMade = False
                     animate = False
+        
+        #AI Move
+        if not gameOver and not humanTurn:
+            AI_Move = ChessAI.findRandomMove(validMoves)
+            gs.makeMove(AI_Move)
+            moveMade = True
+            animate = True
+        
         if moveMade:
             if animate:
                 if len(gs.moveLog) != 0:
