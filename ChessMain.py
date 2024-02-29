@@ -62,9 +62,11 @@ def main():
                     gs.undoMove()       
                     moveMade = True 
         if moveMade:
-            animateMove(gs.moveLog[-1], screen, gs.board, clock)
+            if len(gs.moveLog) != 0:
+                animateMove(gs.moveLog[-1], screen, gs.board, clock)
             validMoves = gs.getValidMoves()
             moveMade = False
+
         drawGameState(screen, gs, validMoves, sqSelected)
         clock.tick(MAX_FPS)
         p.display.flip()
