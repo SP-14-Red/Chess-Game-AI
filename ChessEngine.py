@@ -19,8 +19,8 @@ class GameState():
         self.moveLog = [] #Log moves for review or replay after
         self.wK_Location = (7, 4)
         self.bK_Location = (0, 4)
-        self.checkMate = False
-        self.staleMate = False
+        self.checkmate = False
+        self.stalemate = False
         self.enPassantPossible = () 
         self.currentCastlingRight = CastleRights(True, True, True, True)
         self.castleRightsLog = [CastleRights(self.currentCastlingRight.wKs, self.currentCastlingRight.wQs, self.currentCastlingRight.bQs, self.currentCastlingRight.bKs)]
@@ -146,9 +146,9 @@ class GameState():
             self.undoMove()
         if len(moves) == 0:
             if self.inCheck():
-                self.checkMate = True
+                self.checkmate = True
             else:
-                self.staleMate = True
+                self.stalemate = True
         if self.whiteMove:
             self.getCastleMoves(self.wK_Location[0], self.wK_Location[1], moves)
         else:
