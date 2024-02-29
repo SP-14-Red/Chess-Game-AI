@@ -25,6 +25,7 @@ def main():
     gs = ChessEngine.GameState()
     validMoves = gs.getValidMoves()
     moveMade = False
+    animate = False
     loadImages()
     running = True
     sqSelected = () #none selected initially
@@ -52,6 +53,7 @@ def main():
                         if move == validMoves[i]:
                             gs.makeMove(validMoves[i])
                             moveMade = True
+                            animate = True
                             sqSelected = ()
                             playerClicks = []
                     if not moveMade:
@@ -61,11 +63,14 @@ def main():
                 if e.key == p.K_z: #undo when z key is pressed
                     gs.undoMove()       
                     moveMade = True 
+                    animate = False
         if moveMade:
-            if len(gs.moveLog) != 0:
-                animateMove(gs.moveLog[-1], screen, gs.board, clock)
+            if animate:
+                if len(gs.moveLog) != 0:
+                    animateMove(gs.moveLog[-1], screen, gs.board, clock)
             validMoves = gs.getValidMoves()
             moveMade = False
+            animate = False
 
         drawGameState(screen, gs, validMoves, sqSelected)
         clock.tick(MAX_FPS)
@@ -113,7 +118,7 @@ def animateMove(move, screen, board, clock):
     global colors
     dR = move.endRow - move.startRow
     dC = move.endCol - move.startCol
-    framesPerSquare = 15
+    framesPerSquare = 10
     frameCount = (abs(dR) + abs(dC)) * framesPerSquare
     for frame in range(frameCount + 1):
         r, c = ((move.startRow + dR * frame/frameCount, move.startCol + dC * frame/frameCount))
@@ -124,7 +129,7 @@ def animateMove(move, screen, board, clock):
         p.draw.rect(screen, color, endSquare)
         # piece capture animate
         if move.pieceCaptured != '--':
-            screen.blit(IMAGES[move.pieceCaptured, endSquare])
+            screen.blit(IMAGES[move.pieceCaptured], endSquare)
         #draw movement
         screen.blit(IMAGES[move.pieceMoved], p.Rect(c * SQ_SIZE, r * SQ_SIZE, SQ_SIZE, SQ_SIZE))
         p.display.flip()
