@@ -62,6 +62,9 @@ def main():
             #key presses
             elif e.type == p.KEYDOWN:
                 if e.key == p.K_z: #undo when z key is pressed
+                    gameOver = False
+                    gs.checkmate = False
+                    gs.stalemate = False
                     gs.undoMove()       
                     moveMade = True 
                     animate = False
