@@ -228,7 +228,7 @@ class GameState():
                     endPiece = self.board[endRow][endCol]
                     if endPiece == "--":
                         moves.append(Move( (r, c), (endRow, endCol), self.board))
-                    elif endPiece[0] + enemyColor:
+                    elif endPiece[0] == enemyColor:
                         moves.append(Move( (r, c), (endRow, endCol), self.board))
                         break
                     else:
