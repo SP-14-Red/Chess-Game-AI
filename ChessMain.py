@@ -1,6 +1,7 @@
 #Driver file: in charge of user input and current game state
 
 import pygame as p
+import os
 import ChessEngine, ChessAI
 
 p.init()
@@ -9,6 +10,7 @@ DIMENSION = 8 # Chess boards are 8x8
 SQ_SIZE = HEIGHT // DIMENSION
 MAX_FPS = 60
 IMAGES = {}
+move_sound = p.mixer.Sound("sounds/move.wav")
 
 # For loading images
 def loadImages():
@@ -31,7 +33,7 @@ def main():
     sqSelected = () #none selected initially
     playerClicks = [] #tracks player clicks
     gameOver = False
-    playerOne = True # Determines if white is player(T) or AI(F)
+    playerOne = False # Determines if white is player(T) or AI(F)
     playerTwo = False # Deterermines if black is player(T) or AI(F)
 
     while running:
@@ -55,6 +57,7 @@ def main():
                         print(move.getChessNotation())
                         for i in range(len(validMoves)):
                             if move == validMoves[i]:
+                                p.mixer.Sound.play(move_sound)
                                 gs.makeMove(validMoves[i])
                                 moveMade = True
                                 animate = True 
@@ -78,16 +81,15 @@ def main():
                     playerClicks = []
                     moveMade = False
                     animate = False
-        
         #AI Move
         if not gameOver and not humanTurn:
             AI_Move = ChessAI.findBestMove(gs, validMoves)
             if AI_Move is None:
                 AI_Move = ChessAI.findRandomMove(validMoves)
+            p.mixer.Sound.play(move_sound)
             gs.makeMove(AI_Move)
             moveMade = True
             animate = True
-        
         if moveMade:
             if animate:
                 if len(gs.moveLog) != 0:
@@ -200,9 +202,6 @@ def drawText(screen, text):
     screen.blit(textObject, textLocation)
     textObject = font.render(text, 1, p.Color('Black'))
     screen.blit(textObject, textLocation.move(2, 2))
-
-
-
 
 if __name__ == "__main__":
     main()

@@ -61,7 +61,7 @@ class GameState():
                 self.board[move.endRow][move.endCol + 1] = self.board[move.endRow][move.endCol - 2] #moves rook
                 self.board[move.endRow][move.endCol - 2] = '--' #update space
 
-        self.updateCastelRights(move)
+        self.updateCastleRights(move)
         self.castleRightsLog.append(CastleRights(self.currentCastlingRight.wKs, self.currentCastlingRight.wQs, self.currentCastlingRight.bQs, self.currentCastlingRight.bKs))
 
 
@@ -98,7 +98,7 @@ class GameState():
                     self.board[move.endRow][move.endCol + 1] = '--' #update space  
     
     #can castle
-    def updateCastelRights(self, move):
+    def updateCastleRights(self, move):
         #king movement
         if move.pieceMoved == 'wK':
             self.currentCastlingRight.wKs = False
@@ -299,8 +299,6 @@ class GameState():
             if not self.sqUnderAttack(r, c - 1) and not self.sqUnderAttack(r, c - 2):
                 moves.append(Move((r, c), (r, c - 2), self.board, isCastleMove = True))  
 
-
-
 class CastleRights():
     def __init__(self, wKs, bKs, wQs, bQs):
         self.wKs = wKs
@@ -335,8 +333,6 @@ class Move():
             return self.moveID == other.moveID
         return False
                   
-
-    
     def getChessNotation(self):
         return self.getRankFile(self.startRow, self.startCol) + ", " + self.getRankFile(self.endRow, self.endCol)
     
