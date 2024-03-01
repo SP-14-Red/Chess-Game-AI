@@ -12,21 +12,29 @@ def findRandomMove(validMoves):
 # implementing algorithns such as minimax/greedy
 def findBestMove(gs, validMoves):
     turnMultiplier = 1 if gs.whiteMove else -1
-    maxScore = -CHECKMATE
-    bestMove = None
+    opponentMinMaxScore = CHECKMATE
+    bestPlayerMove = None
+    random.shuffle(validMoves)
     for playerMove in validMoves:
         gs.makeMove(playerMove)
-        if gs.checkmate:
-            score = CHECKMATE
-        elif gs.stalemate:
-            score = STALEMATE
-        else:
-            score = turnMultiplier * scoreMaterial(gs.board)
-        if score > maxScore:
-            maxScore = score
-            bestMove = playerMove
+        opponentsMoves = gs.getValidMoves()
+        opponentMaxScore = -CHECKMATE
+        for opponentsMove in opponentsMoves:
+            gs.makeMove(opponentsMove)
+            if gs.checkmate:
+                score = -turnMultiplier * CHECKMATE
+            elif gs.stalemate:
+                score = STALEMATE
+            else:
+                score = -turnMultiplier * scoreMaterial(gs.board)
+            if score > opponentMaxScore:
+                opponentMaxScore = score
+            gs.undoMove()
+        if opponentMinMaxScore > opponentMaxScore:
+            opponentMinMaxScore = opponentMaxScore
+            bestPlayerMove = playerMove
         gs.undoMove()
-    return bestMove
+    return bestPlayerMove
 
 # Scoring for the board
 def scoreMaterial(board):
