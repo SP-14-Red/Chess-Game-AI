@@ -1,9 +1,40 @@
 #AI file: in charge of implenting algorithms for AI gameplay
 import random
 
+pieceWeight = {'K': 0, "Q": 10, "R": 5, "B": 3, "N": 3, "P": 1}
+CHECKMATE = 1000
+STALEMATE = 0
 
+# random move set for initial testing
 def findRandomMove(validMoves):
     return validMoves[random.randint(0, len(validMoves) - 1)]
 
-def findBestMove():
-    return
+# implementing algorithns such as minimax/greedy
+def findBestMove(gs, validMoves):
+    turnMultiplier = 1 if gs.whiteMove else -1
+    maxScore = -CHECKMATE
+    bestMove = None
+    for playerMove in validMoves:
+        gs.makeMove(playerMove)
+        if gs.checkmate:
+            score = CHECKMATE
+        elif gs.stalemate:
+            score = STALEMATE
+        else:
+            score = turnMultiplier * scoreMaterial(gs.board)
+        if score > maxScore:
+            score = maxScore
+            bestMove = playerMove
+        gs.undoMove()
+        return bestMove
+
+# Scoring for the board
+def scoreMaterial(board):
+    score = 0
+    for row in board:
+        for square in row:
+            if square[0] == 'w':
+                score += pieceWeight[square[1]]
+            elif square[0] == 'b':
+                score -= pieceWeight[square[1]]
+    return score

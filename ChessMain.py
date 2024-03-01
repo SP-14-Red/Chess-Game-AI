@@ -17,7 +17,6 @@ def loadImages():
         chessPieces = p.image.load("images/" + piece + ".png")
         IMAGES[piece] = p.transform.smoothscale(chessPieces, (SQ_SIZE - 10, SQ_SIZE - 10))
     
-
 # Main driver that will handle user input and update graphics
 def main():
     screen = p.display.set_mode((WIDTH, HEIGHT))
@@ -33,7 +32,7 @@ def main():
     playerClicks = [] #tracks player clicks
     gameOver = False
     playerOne = True # Determines if white is player(T) or AI(F)
-    playerTwo = False # Deterermines if black is ai(F) or player(T)
+    playerTwo = False # Deterermines if black is player(T) or AI(F)
 
     while running:
         humanTurn = (gs.whiteMove and playerOne) or (not gs.whiteMove and playerTwo)
@@ -82,7 +81,9 @@ def main():
         
         #AI Move
         if not gameOver and not humanTurn:
-            AI_Move = ChessAI.findRandomMove(validMoves)
+            AI_Move = ChessAI.findBestMove(gs, validMoves)
+            if AI_Move is None:
+                AI_Move = ChessAI.findRandomMove(validMoves)
             gs.makeMove(AI_Move)
             moveMade = True
             animate = True
