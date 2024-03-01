@@ -23,10 +23,10 @@ def findBestMove(gs, validMoves):
         else:
             score = turnMultiplier * scoreMaterial(gs.board)
         if score > maxScore:
-            score = maxScore
+            maxScore = score
             bestMove = playerMove
         gs.undoMove()
-        return bestMove
+    return bestMove
 
 # Scoring for the board
 def scoreMaterial(board):
