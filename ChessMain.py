@@ -33,7 +33,7 @@ def main():
     sqSelected = () #none selected initially
     playerClicks = [] #tracks player clicks
     gameOver = False
-    playerOne = False # Determines if white is player(T) or AI(F)
+    playerOne = True # Determines if white is player(T) or AI(F)
     playerTwo = False # Deterermines if black is player(T) or AI(F)
 
     while running:
