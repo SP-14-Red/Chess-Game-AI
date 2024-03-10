@@ -34,7 +34,7 @@ def main():
     playerClicks = [] #tracks player clicks
     gameOver = False
     playerOne = True # Determines if white is player(T) or AI(F)
-    playerTwo = False # Deterermines if black is player(T) or AI(F)
+    playerTwo = True # Deterermines if black is player(T) or AI(F)
 
     while running:
         humanTurn = (gs.whiteMove and playerOne) or (not gs.whiteMove and playerTwo)
@@ -196,7 +196,7 @@ def animateMove(move, screen, board, clock):
         clock.tick(60)
 
 def drawText(screen, text):
-    font = p.font.SysFont("Calibri", 64, True, False)
+    font = p.font.SysFont("Calibri", 52, True, False)
     textObject = font.render(text, 1, p.Color('Gray'))
     textLocation = p.Rect(0, 0, WIDTH, HEIGHT).move(WIDTH / 2 - textObject.get_width() / 2, HEIGHT / 2 - textObject.get_height() / 2)
     screen.blit(textObject, textLocation)
