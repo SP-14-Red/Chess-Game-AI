@@ -5,7 +5,7 @@ import os
 import ChessEngine, ChessAI
 
 p.init()
-WIDTH = HEIGHT = 800
+WIDTH = HEIGHT = 600
 DIMENSION = 8 # Chess boards are 8x8
 SQ_SIZE = HEIGHT // DIMENSION
 MAX_FPS = 60
