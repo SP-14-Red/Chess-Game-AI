@@ -34,7 +34,7 @@ def main():
     playerClicks = [] #tracks player clicks
     gameOver = False
     playerOne = True # Determines if white is player(T) or AI(F)
-    playerTwo = True # Deterermines if black is player(T) or AI(F)
+    playerTwo = False # Deterermines if black is player(T) or AI(F)
 
     while running:
         humanTurn = (gs.whiteMove and playerOne) or (not gs.whiteMove and playerTwo)
@@ -81,6 +81,11 @@ def main():
                     playerClicks = []
                     moveMade = False
                     animate = False
+                elif e.key == p.K_LCTRL: #Switches Black pieces to AI or player when left ctrl is pressed
+                    if playerTwo == True:
+                        playerTwo = False
+                    else:
+                        playerTwo = True
         #AI Move
         if not gameOver and not humanTurn:
             AI_Move = ChessAI.findBestMove(gs, validMoves)
