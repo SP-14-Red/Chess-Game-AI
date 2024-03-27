@@ -81,7 +81,12 @@ def main():
                     playerClicks = []
                     moveMade = False
                     animate = False
-                elif e.key == p.K_LCTRL: #Switches Black pieces to AI or player when left ctrl is pressed
+                elif e.key == p.K_w: #Switches white pieces to AI or player when left ctrl is pressed
+                    if playerOne == True:
+                        playerOne = False
+                    else:
+                        playerTwo = True
+                elif e.key == p.K_b: #Switches Black pieces to AI or player when left ctrl is pressed
                     if playerTwo == True:
                         playerTwo = False
                     else:
@@ -201,7 +206,7 @@ def animateMove(move, screen, board, clock):
         clock.tick(60)
 
 def drawText(screen, text):
-    font = p.font.SysFont("Calibri", 52, True, False)
+    font = p.font.SysFont("Calibri", 48, True, False)
     textObject = font.render(text, 1, p.Color('Gray'))
     textLocation = p.Rect(0, 0, WIDTH, HEIGHT).move(WIDTH / 2 - textObject.get_width() / 2, HEIGHT / 2 - textObject.get_height() / 2)
     screen.blit(textObject, textLocation)
