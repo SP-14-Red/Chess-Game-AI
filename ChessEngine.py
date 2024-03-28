@@ -25,7 +25,6 @@ class GameState():
         self.currentCastlingRight = CastleRights(True, True, True, True)
         self.castleRightsLog = [CastleRights(self.currentCastlingRight.wKs, self.currentCastlingRight.wQs, self.currentCastlingRight.bQs, self.currentCastlingRight.bKs)]
 
-
     #takes move changes and initializes the move
     def makeMove(self, move):
         self.board[move.startRow][move.startCol] = "--"
@@ -214,8 +213,6 @@ class GameState():
                     moves.append(Move((r, c), (r + 1, c + 1), self.board))
                 elif (r + 1, c + 1) == self.enPassantPossible:
                     moves.append(Move((r, c), (r + 1, c + 1), self.board, isEnpassantMove = True))
-            
-        
 
     def getRookMoves(self, r, c, moves):
         directions = ( (-1, 0), (1, 0), (0, 1), (0, -1) )        
@@ -338,8 +335,3 @@ class Move():
     
     def getRankFile(self, r, c):
         return self.colsToFiles[c] + self.rowsToRanks[r]
-
-
-
-
-        
