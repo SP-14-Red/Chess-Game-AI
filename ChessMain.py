@@ -1,7 +1,6 @@
 #Driver file: in charge of user input and current game state
 
 import pygame as p
-import os
 import ChessEngine, ChessAI
 
 p.init()
@@ -81,12 +80,12 @@ def main():
                     playerClicks = []
                     moveMade = False
                     animate = False
-                elif e.key == p.K_w: #Switches white pieces to AI or player when left ctrl is pressed
+                elif e.key == p.K_w: #Switches white pieces to AI or player when key 'w' is pressed
                     if playerOne == True:
                         playerOne = False
                     else:
                         playerTwo = True
-                elif e.key == p.K_b: #Switches Black pieces to AI or player when left ctrl is pressed
+                elif e.key == p.K_b: #Switches Black pieces to AI or player when key 'b' is pressed
                     if playerTwo == True:
                         playerTwo = False
                     else:
