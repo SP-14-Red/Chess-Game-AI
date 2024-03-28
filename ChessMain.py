@@ -84,7 +84,7 @@ def main():
                     if playerOne == True:
                         playerOne = False
                     else:
-                        playerTwo = True
+                        playerOne = True
                 elif e.key == p.K_b: #Switches Black pieces to AI or player when key 'b' is pressed
                     if playerTwo == True:
                         playerTwo = False
