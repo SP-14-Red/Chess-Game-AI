@@ -74,12 +74,14 @@ def main():
                     moveMade = True 
                     animate = False
                 elif e.key == p.K_r: #reset board when r is pressed
+                    gameOver = False
                     gs = ChessEngine.GameState()
                     validMoves = gs.getValidMoves()
                     sqSelected = ()
                     playerClicks = []
                     moveMade = False
                     animate = False
+                    playerOne = True
                 elif e.key == p.K_w: #Switches white pieces to AI or player when key 'w' is pressed
                     if playerOne == True:
                         playerOne = False
