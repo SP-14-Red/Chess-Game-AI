@@ -10,7 +10,35 @@ DEPTH = 3
 def findRandomMove(validMoves):
     return validMoves[random.randint(0, len(validMoves) - 1)]
 
-# implementing algorithns such as minimax/greedy
+def findBestMove(gs, validMoves): #Mover function for implementing algorithm
+    global nextMove
+    nextMove = None
+    random.shuffle(validMoves)
+    findMinMaxWithAlphaBeta(gs, validMoves, DEPTH, -CHECKMATE, CHECKMATE, 1 if gs.whiteMove else -1)
+    return nextMove
+
+def findMinMaxWithAlphaBeta(gs, validMoves, depth, alpha, beta, turnMultiplier): #implemented alpha/beta pruning. improved run time
+    global nextMove
+    if depth == 0:
+        return turnMultiplier * scoreBoard(gs)
+    
+    maxScore = -CHECKMATE
+    for move in validMoves:
+        gs.makeMove(move)
+        nextMoves = gs.getValidMoves()
+        score = -findMinMaxWithAlphaBeta(gs, nextMoves, depth - 1,  -beta, -alpha, -turnMultiplier)
+        if score > maxScore:
+            maxScore = score
+            if depth == DEPTH:
+                nextMove = move
+        gs.undoMove()
+        if maxScore > alpha: #alpha/beta pruning steps
+            alpha = maxScore
+        if alpha >= beta:
+            break
+    return maxScore
+
+# implementing algorithns such as minimax/greedy (NOT IN USE)
 def findBestMoveGreedy(gs, validMoves):
     turnMultiplier = 1 if gs.whiteMove else -1
     opponentMinMaxScore = CHECKMATE
@@ -43,14 +71,7 @@ def findBestMoveGreedy(gs, validMoves):
         gs.undoMove()
     return bestPlayerMove
 
-def findBestMove(gs, validMoves):
-    global nextMove
-    nextMove = None
-    random.shuffle(validMoves)
-    findNegaMax(gs, validMoves, DEPTH, -CHECKMATE, CHECKMATE, 1 if gs.whiteMove else -1)
-    return nextMove
-
-def findMinMaxRecursive(gs, validMoves, depth, whiteMove): #more effective but slower past depth 2
+def findMinMaxRecursive(gs, validMoves, depth, whiteMove): #more effective but slower past depth 2 (NOT IN USE)
     global nextMove
     if depth == 0:
         return scoreMaterial(gs.board)
@@ -79,27 +100,6 @@ def findMinMaxRecursive(gs, validMoves, depth, whiteMove): #more effective but s
                     nextMove = move
             gs.undoMove()
         return minScore
-    
-def findNegaMax(gs, validMoves, depth, alpha, beta, turnMultiplier): #implemented alpha/beta pruning. improved run time
-    global nextMove
-    if depth == 0:
-        return turnMultiplier * scoreBoard(gs)
-    
-    maxScore = -CHECKMATE
-    for move in validMoves:
-        gs.makeMove(move)
-        nextMoves = gs.getValidMoves()
-        score = -findNegaMax(gs, nextMoves, depth - 1,  -beta, -alpha, -turnMultiplier)
-        if score > maxScore:
-            maxScore = score
-            if depth == DEPTH:
-                nextMove = move
-        gs.undoMove()
-        if maxScore > alpha: #alpha/beta pruning steps
-            alpha = maxScore
-        if alpha >= beta:
-            break
-    return maxScore
     
 def scoreBoard(gs):    #positve score is white advanatage and negative score is black advantage
     if gs.checkmate:
