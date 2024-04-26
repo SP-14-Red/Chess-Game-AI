@@ -4,13 +4,14 @@ import random
 pieceWeight = {'K': 0, "Q": 10, "R": 5, "B": 3, "N": 3, "P": 1}
 CHECKMATE = 1000
 STALEMATE = 0
+DEPTH = 2
 
-# random move set for initial testing
+# random move set for initial testing and if no best moves are found
 def findRandomMove(validMoves):
     return validMoves[random.randint(0, len(validMoves) - 1)]
 
 # implementing algorithns such as minimax/greedy
-def findBestMove(gs, validMoves):
+def findBestMoveGreedy(gs, validMoves):
     turnMultiplier = 1 if gs.whiteMove else -1
     opponentMinMaxScore = CHECKMATE
     bestPlayerMove = None
@@ -41,6 +42,78 @@ def findBestMove(gs, validMoves):
             bestPlayerMove = playerMove
         gs.undoMove()
     return bestPlayerMove
+
+def findBestMove(gs, validMoves):
+    global nextMove
+    nextMove = None
+    random.shuffle(validMoves)
+    findNegaMax(gs, validMoves, DEPTH, 1 if gs.whiteMove else -1)
+    return nextMove
+
+def findMinMaxRecursive(gs, validMoves, depth, whiteMove):
+    global nextMove
+    if depth == 0:
+        return scoreMaterial(gs.board)
+    
+    if whiteMove:
+        maxScore = -CHECKMATE
+        for move in validMoves:
+            gs.makeMove(move)
+            nextMoves = gs.getValidMoves()
+            score = findMinMaxRecursive (gs, nextMoves, depth - 1, False)
+            if score > maxScore:
+                maxScore = score
+                if depth == DEPTH:
+                    nextMove = move
+            gs.undoMove()
+        return maxScore
+    else:
+        minScore = CHECKMATE
+        for move in validMoves:
+            gs.makeMove(move)
+            nextMoves = gs.getValidMoves()
+            score = findMinMaxRecursive (gs, nextMoves, depth - 1, True)
+            if score < minScore:
+                minScore = score
+                if depth == DEPTH:
+                    nextMove = move
+            gs.undoMove()
+        return minScore
+    
+def findNegaMax(gs, validMoves, depth, turnMultiplier):
+    global nextMove
+    if depth == 0:
+        return turnMultiplier * scoreBoard(gs)
+    
+    maxScore = -CHECKMATE
+    for move in validMoves:
+        gs.makeMove(move)
+        nextMoves = gs.getValidMoves()
+        score = -findNegaMax(gs, nextMoves, depth - 1, -turnMultiplier)
+        if score > maxScore:
+            maxScore = score
+            if depth == DEPTH:
+                nextMove = move
+        gs.undoMove()
+    return maxScore
+    
+def scoreBoard(gs):    #positve score is white advanatage and negative score is black advantage
+    if gs.checkmate:
+        if gs.whiteMove:
+            return -CHECKMATE
+        else:
+            return CHECKMATE
+    elif gs.stalemate:
+        return STALEMATE
+    
+    score = 0
+    for row in gs.board:
+        for square in row:
+            if square[0] == 'w':
+                score += pieceWeight[square[1]]
+            elif square[0] == 'b':
+                score -= pieceWeight[square[1]]
+    return score
 
 # Scoring for the board
 def scoreMaterial(board):
