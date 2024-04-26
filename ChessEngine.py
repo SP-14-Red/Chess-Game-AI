@@ -63,7 +63,6 @@ class GameState():
         self.updateCastleRights(move)
         self.castleRightsLog.append(CastleRights(self.currentCastlingRight.wKs, self.currentCastlingRight.wQs, self.currentCastlingRight.bQs, self.currentCastlingRight.bKs))
 
-
     def undoMove(self):
         if len(self.moveLog) != 0:
             move = self.moveLog.pop()
@@ -95,6 +94,9 @@ class GameState():
                 else: #queen side
                     self.board[move.endRow][move.endCol - 2] = self.board[move.endRow][move.endCol + 1] #moves rook
                     self.board[move.endRow][move.endCol + 1] = '--' #update space  
+
+            self.checkmate = False
+            self.stalemate = False
     
     #can castle
     def updateCastleRights(self, move):
