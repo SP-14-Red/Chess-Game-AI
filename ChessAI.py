@@ -4,7 +4,7 @@ import random
 pieceWeight = {'K': 0, "Q": 10, "R": 5, "B": 3, "N": 3, "P": 1}
 CHECKMATE = 1000
 STALEMATE = 0
-DEPTH = 2
+DEPTH = 3
 
 # random move set for initial testing and if no best moves are found
 def findRandomMove(validMoves):
@@ -47,10 +47,10 @@ def findBestMove(gs, validMoves):
     global nextMove
     nextMove = None
     random.shuffle(validMoves)
-    findNegaMax(gs, validMoves, DEPTH, 1 if gs.whiteMove else -1)
+    findNegaMax(gs, validMoves, DEPTH, -CHECKMATE, CHECKMATE, 1 if gs.whiteMove else -1)
     return nextMove
 
-def findMinMaxRecursive(gs, validMoves, depth, whiteMove):
+def findMinMaxRecursive(gs, validMoves, depth, whiteMove): #more effective but slower past depth 2
     global nextMove
     if depth == 0:
         return scoreMaterial(gs.board)
@@ -80,7 +80,7 @@ def findMinMaxRecursive(gs, validMoves, depth, whiteMove):
             gs.undoMove()
         return minScore
     
-def findNegaMax(gs, validMoves, depth, turnMultiplier):
+def findNegaMax(gs, validMoves, depth, alpha, beta, turnMultiplier): #implemented alpha/beta pruning. improved run time
     global nextMove
     if depth == 0:
         return turnMultiplier * scoreBoard(gs)
@@ -89,12 +89,16 @@ def findNegaMax(gs, validMoves, depth, turnMultiplier):
     for move in validMoves:
         gs.makeMove(move)
         nextMoves = gs.getValidMoves()
-        score = -findNegaMax(gs, nextMoves, depth - 1, -turnMultiplier)
+        score = -findNegaMax(gs, nextMoves, depth - 1,  -beta, -alpha, -turnMultiplier)
         if score > maxScore:
             maxScore = score
             if depth == DEPTH:
                 nextMove = move
         gs.undoMove()
+        if maxScore > alpha: #alpha/beta pruning steps
+            alpha = maxScore
+        if alpha >= beta:
+            break
     return maxScore
     
 def scoreBoard(gs):    #positve score is white advanatage and negative score is black advantage
