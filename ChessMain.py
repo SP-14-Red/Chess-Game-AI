@@ -70,7 +70,18 @@ def main():
                     gameOver = False
                     gs.checkmate = False
                     gs.stalemate = False
-                    gs.undoMove()       
+                    if playerOne == False:
+                            playerOne = True
+                            gs.undoMove()
+                            gs.undoMove()
+                            playerOne = False
+                    elif playerTwo == False:
+                        playerTwo = True
+                        gs.undoMove()
+                        gs.undoMove()
+                        playerTwo = False
+                    else:
+                        gs.undoMove()
                     moveMade = True 
                     animate = False
                 elif e.key == p.K_r: #reset board when r is pressed
